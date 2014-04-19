@@ -21,7 +21,7 @@ DAT.Globe = function(container, opts) {
     c.setHSL( ( 0.6 - ( x * 0.5 ) ), 1.0, 0.5 );
     return c;
   };
-  var imgDir = opts.imgDir || '/globe/';
+  var imgDir = opts.imgDir || '';
 
   var Shaders = {
     'earth' : {
@@ -170,7 +170,7 @@ DAT.Globe = function(container, opts) {
 
     opts.animated = opts.animated || false;
     this.is_animated = opts.animated;
-    opts.format = opts.format || 'magnitude'; // other option is 'legend'
+    opts.format = opts.format || 'legend'; // other option is 'legend'
     console.log(opts.format);
     if (opts.format === 'magnitude') {
       step = 3;

@@ -37,7 +37,7 @@ DAT.Globe = function(container, colorFn) {
 
   var overRenderer;
 
-  var imgDir = './';
+  var imgDir = '';
 
   var curZoomSpeed = 0;
 
