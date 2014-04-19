@@ -369,7 +369,7 @@ DAT.Globe = function(container, opts) {
 
     camera.lookAt(mesh.position);
     //console.log(mesh.position);
-    console.log(rotation.x + ' ' + rotation.y);
+    //console.log(rotation.x + ' ' + rotation.y);
     renderer.render(scene, camera);
   }
 
