@@ -15,7 +15,7 @@ var DAT = DAT || {};
 
 DAT.Globe = function(container, opts) {
   opts = opts || {};
-  
+
   var colorFn = opts.colorFn || function(x) {
     var c = new THREE.Color();
     c.setHSL( ( 0.6 - ( x * 0.5 ) ), 1.0, 0.5 );
@@ -238,10 +238,13 @@ DAT.Globe = function(container, opts) {
             this._baseGeometry.morphTargets.push({'name': 'morphPadding'+i, vertices: this._baseGeometry.vertices});
           }
         }
+        shader = Shaders['earth'];
+        console.log(shader);
         this.points = new THREE.Mesh(this._baseGeometry, new THREE.MeshBasicMaterial({
               color: 0xffffff,
               vertexColors: THREE.FaceColors,
-              morphTargets: true
+              morphTargets: true,
+              vertexShader: shader.vertexShader
             }));
       }
       scene.add(this.points);
@@ -366,7 +369,7 @@ DAT.Globe = function(container, opts) {
 
     camera.lookAt(mesh.position);
     //console.log(mesh.position);
-
+    console.log(rotation.x + ' ' + rotation.y);
     renderer.render(scene, camera);
   }
 
@@ -379,7 +382,6 @@ DAT.Globe = function(container, opts) {
           target.y = target.y + .02;
 
         target.x = target.x + .04;
-        console.log(target.y);
       }
     else
       abortTimer();
@@ -445,4 +447,3 @@ DAT.Globe = function(container, opts) {
   return this;
 
 };
-

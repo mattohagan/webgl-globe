@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE HTML>
 <html lang="en">
   <head>
-    <title>WebGL Globe</title>
+    <title>Pioneer</title>
     <meta charset="utf-8">
     <style type="text/css">
       html {
@@ -100,8 +100,39 @@
 
 
     </style>
+    <SCRIPT LANGUAGE="JavaScript">
+<!--Hide
+/*May be used if credited:
+The HiTMilL
+http://www.hitmill.com/programming/js/javascript.html*/
+/*You may change value of, or remove bgcolor
+from table cell*/
+var gizmo;
+function stopClock(){
+clearTimeout(gizmo);
+}
+function yourClock(){
+var nd = new Date();
+var h, m, s;
+var time=" ";
+h = nd.getHours();
+m = nd.getMinutes();
+s = nd.getSeconds();
+if (s <=9) s="0" + s;
+if (m <=9) m="0" + m;
+if (h <=9) h="0" + h;
+time+=h+":"+m+":"+s;
+document.the_clock.the_time.value=time;
+gizmo=setTimeout("yourClock()",1000);
+}
+// Stop hiding -->
+</SCRIPT>
+
   </head>
   <body>
+
+
+<BODY BGCOLOR="white" onLoad="yourClock()", onUnload="stopClock(); return true">
 
   <div id="container"></div>
 
@@ -110,6 +141,10 @@
   </div>
 
   <div id="currentInfo">
+    <TABLE ID="tabletwo"><TR><TD>
+<FORM NAME="the_clock">
+<INPUT TYPE="text" NAME="the_time" SIZE="13">
+</FORM></TD></TR></TABLE>
     <span id="year1990" class="year">1990</span>
     <span id="year1995" class="year">1995</span>
     <span id="year2000" class="year">2000</span>
@@ -142,7 +177,7 @@
 
       console.log(globe);
       var i, tweens = [];
-      
+
       var settime = function(globe, t) {
         return function() {
           new TWEEN.Tween(globe).to({time: t/years.length},500).easing(TWEEN.Easing.Cubic.EaseOut).start();
@@ -157,16 +192,16 @@
           y.setAttribute('class', 'year active');
         };
       };
-      
+
       for(var i = 0; i<years.length; i++) {
         var y = document.getElementById('year'+years[i]);
         y.addEventListener('mouseover', settime(globe,i), false);
       }
-      
+
       var xhr;
       TWEEN.start();
-      
-      
+
+
       xhr = new XMLHttpRequest();
       xhr.open('GET', population, true);
       xhr.onreadystatechange = function(e) {
