@@ -68,6 +68,8 @@ DAT.Globe = function(container, opts) {
     }
   };
 
+  var spin = true;
+
   var camera, scene, renderer, w, h;
   var mesh, atmosphere, point;
 
@@ -270,6 +272,7 @@ DAT.Globe = function(container, opts) {
   }
 
   function onMouseDown(event) {
+    resetTimeout();
     event.preventDefault();
 
     container.addEventListener('mousemove', onMouseMove, false);
@@ -312,6 +315,7 @@ DAT.Globe = function(container, opts) {
   }
 
   function onMouseWheel(event) {
+    resetTimeout();
     event.preventDefault();
     if (overRenderer) {
       zoom(event.wheelDeltaY * 0.3);
@@ -361,12 +365,48 @@ DAT.Globe = function(container, opts) {
     camera.position.z = distance * Math.cos(rotation.x) * Math.cos(rotation.y);
 
     camera.lookAt(mesh.position);
+    //console.log(mesh.position);
 
     renderer.render(scene, camera);
   }
 
+  function spinGlobe(){
+    if(spin === true)
+      {
+        if(target.y > 0.6)
+          target.y = target.y - .02;
+        else if(target.y < 0.4)
+          target.y = target.y + .02;
+
+        target.x = target.x + .04;
+        console.log(target.y);
+      }
+    else
+      abortTimer();
+  }
+
+  function abortTimer(){
+    clearInterval(tid);
+    stid = setTimeout(listenToSpin, 3000);
+  }
+
+  function resetTimeout(){
+    spin = false;
+    clearTimeout(stid);
+    stid = setTimeout(listenToSpin, 3000);
+  }
+
+  function listenToSpin(){
+    spin = true;
+    tid = setInterval(spinGlobe, 100);
+    clearTimeout(stid);
+  }
+
   init();
   this.animate = animate;
+
+  var stid;
+  var tid = setInterval(spinGlobe, 100);
 
 
   this.__defineGetter__('time', function() {
