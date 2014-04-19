@@ -1,66 +1,24 @@
-//<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 
-//var xhr = new XMLHttpRequest();
-var location = '/svc/news/v3/content/nyc/arts/?api-key=ca20d566e5f27fd0edaedea5545aae3b:7:69265292'
-var loc = 'api.nytimes.com';
+var nytKey = 'ca20d566e5f27fd0edaedea5545aae3b:7:69265292'
+var location = 'http://api.nytimes.com/svc/news/v3/content/nyc/arts/?api-key=' + nytKey;
 
-var http = require("http");
-var reqData;
-
-var options = {
-	host: loc,
-	port: 80,
-	path: location,
-	method: 'GET'
-};
-
-
-var req = http.request(options, function(res)
-{
-	console.log('STATUS: ' + res.statusCode);
-	console.log('HEADERS: ' + JSON.stringify(res.headers));
-	res.setEncoding('utf8');
-
-	res.on('data', function(chunk)
-	{
-		req.write(chunk);
-		console.log('CHUNK: ' + chunk);
-		reqData = chunk;
-	});
-
-	res.on('end', function(res)
-	{
-		console.log('Response End');
+// hit new york times api and write to nyt.json
+var fs = require('fs');
+var request = require('request');
+request(location, function(error, response, body){
+	if(!error && response.statusCode == 200){
+		console.log(body);
+	}
+	var data = JSON.parse(body);
+	fs.writeFile('nyt.json', JSON.stringify(data), function(err){
+		if(err)
+			console.log(err);
+		else
+			console.log("\nFile was saved");
 	});
 });
 
-req.on('error', function(e)
-{
-	console.log('ERROR: ' + e.message);
-});
-
-console.log('End Of Request');
-req.end();
-
-/*
-$.ajax({
-	type: 'POST',
-	url: 'nyt.json',
-	data: reqData,
-	success: console.log('data: ' + data),
-	contentType: "application/json",
-	dataType: 'json'
-});
+// hit google geocoding api and write coordinates to dots.json
 
 
-/*xhr.open('GET', location, true);
-xhr.onreadystatechange = function(e){
-	console.log(xhr.readyState + ' ' + xhr.status);
-	var data = JSON.parse(xhr.responseText);
 
-	console.log(data);
-
-	var anotherXHR = new XMLHttpRequest();
-	xhr.open('POST', 'nyt.json', true);
-}
-*/
