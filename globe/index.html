@@ -132,8 +132,10 @@
     if(!Detector.webgl){
       Detector.addGetWebGLMessage();
     } else {
+      var population = 'dots.json';
 
-      var years = ['1990','1995','2000'];
+      //var years = ['1990','1995','2000'];
+      var years = ['1990'];
       var container = document.getElementById('container');
       var globe = new DAT.Globe(container);
 
@@ -165,7 +167,7 @@
       
       
       xhr = new XMLHttpRequest();
-      xhr.open('GET', 'population909500.json', true);
+      xhr.open('GET', population, true);
       xhr.onreadystatechange = function(e) {
         //console.log(xhr.readyState + ' ' + xhr.status);
         if (xhr.readyState === 4) {
