@@ -138,8 +138,8 @@ DAT.Globe = function(container, opts) {
     mesh.scale.set( 1.1, 1.1, 1.1 );
     scene.add(mesh);
 
-    geometry = new THREE.CubeGeometry(0.75, 0.75, 1);
-    geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0,0,-0.5));
+    geometry = new THREE.SphereGeometry(2,0.75, 0.75);
+    geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0,0,0.5));
 
     point = new THREE.Mesh(geometry);
 
@@ -172,7 +172,7 @@ DAT.Globe = function(container, opts) {
 
     opts.animated = opts.animated || false;
     this.is_animated = opts.animated;
-    opts.format = opts.format || 'legend'; // other option is 'legend'
+    opts.format = opts.format || 'magnitude'; // other option is 'legend'
     console.log(opts.format);
     if (opts.format === 'magnitude') {
       step = 3;
