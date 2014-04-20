@@ -145,7 +145,7 @@ DAT.Globe = function(container, opts) {
     scene.add(mesh);
 
     geometry = new THREE.SphereGeometry(2,0.75, 0.75);
-    geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0,0,-20));
+    geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0,0,-15));
 
     var ptMaterial = new THREE.MeshBasicMaterial({color: 0xFF9900});
     point = new THREE.Mesh(geometry, material);
@@ -353,7 +353,7 @@ DAT.Globe = function(container, opts) {
 
     container.style.cursor = 'move';
 
-    var vector = new THREE.Vector3((event.clientX / window.innderWidth) * 2 - 1, - (event.clientY / window.innerHeight) * 2 +1, 0.5);
+    /*var vector = new THREE.Vector3((event.clientX / window.innderWidth) * 2 - 1, - (event.clientY / window.innerHeight) * 2 +1, 0.5);
     projector.unprojectVector(vector, camera);
 
     var raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
@@ -378,7 +378,7 @@ DAT.Globe = function(container, opts) {
       particle.position = intersects[0].point;
       particle.scale.x = particle.scale.y = 16;
       scene.add(particle);
-    }
+    }*/
 
 
 
