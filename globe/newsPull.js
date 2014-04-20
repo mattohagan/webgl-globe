@@ -9,11 +9,12 @@ var fs = require('fs');
 var request = require('request');
 var async = require('async');
 //var jQuery = require('jQuery');
-var locc = 'solid.json';
+
+var locc = 'http://162.242.233.97/webgl-globe/globe/solid.json';
 // hit new york times api and write to nyt.json
 request(locc, function(error, response, body){
 	if(!error && response.statusCode === 200){
-		//console.log(body);
+		console.log(body);
 	}
 	var data = JSON.parse(body);
 	var newnewString = ' ';
