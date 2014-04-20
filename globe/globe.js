@@ -153,7 +153,7 @@ DAT.Globe = function(container, opts) {
     renderer = new THREE.WebGLRenderer({antialias: false});
     renderer.setSize(w, h);
 
-    projector = new THREE.Projector();
+    //projector = new THREE.Projector();
 
     renderer.domElement.style.position = 'absolute';
 
