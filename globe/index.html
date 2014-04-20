@@ -16,7 +16,7 @@
         padding: 0;
         background: #000000 url(loading.gif) center center no-repeat;
         color: #ffffff;
-        font-family: sans-serif;
+        font-family: "prime", Verdana, Tahoma;
         font-size: 13px;
         line-height: 20px;
         height: 100%;
@@ -117,43 +117,21 @@
         background: transparent;
       }
 
-      .checkboxFour {
-	width: 40px;
-	height: 40px;
-	background: #ddd;
-	margin: 20px 90px;
+div.scroll
+{
 
-	border-radius: 100%;
-	position: relative;
-	-webkit-box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
-	-moz-box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
-	box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
-}
-.checkboxFour label {
-	display: block;
-	width: 30px;
-	height: 30px;
-	border-radius: 100px;
-
-	-webkit-transition: all .5s ease;
-	-moz-transition: all .5s ease;
-	-o-transition: all .5s ease;
-	-ms-transition: all .5s ease;
-	transition: all .5s ease;
-	cursor: pointer;
-	position: absolute;
-	top: 5px;
-	left: 5px;
-	z-index: 1;
-
-	background: #333;
-
-	-webkit-box-shadow:inset 0px 1px 3px rgba(0,0,0,0.5);
-	-moz-box-shadow:inset 0px 1px 3px rgba(0,0,0,0.5);
-	box-shadow:inset 0px 1px 3px rgba(0,0,0,0.5);
-}
-.checkboxFour input[type=checkbox]:checked + label {
-	background: #26ca28;
+z-index:2;
+background-color:#00FFFF;
+width:20%;
+height:40%;
+overflow:scroll;
+background: transparent;
+padding-top:15%;
+padding-left:15px;
+border:2px solid #a1a1a1;
+border-radius:25px;
+margin-top: 6%;
+margin-left: 15px;
 }
 
 
@@ -229,16 +207,14 @@
 
 </div>
 
-<h3>Checkbox Four</h3>
-  	<div class="checkboxFour">
-  		<input type="checkbox" value="1" id="checkboxFourInput" name="" />
-	  	<label for="checkboxFourInput"></label>
-  	</div>
 
-  <a id="ce" href="http://www.chromeexperiments.com/globe">
+<div class="scroll">You can use the overflow property when you want to have better control of the layout. The default value is visible.</div>
+
+
+  <!--<a id="ce" href="http://www.chromeexperiments.com/globe">
     <span>This is a Chrome Experiment</span>
   </a>
-
+-->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
   <script type="text/javascript" src="third-party/Detector.js"></script>
   <script type="text/javascript" src="third-party/three.min.js"></script>
