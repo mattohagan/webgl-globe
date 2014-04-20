@@ -39,10 +39,6 @@
         position: absolute;
         left: 20px;
         top: 63px;
-
-        background-color: rgba(0,0,0,0.2);
-
-
         padding: 10px;
       }
 
@@ -60,28 +56,28 @@
       }
 
       #title {
-        top: 20px;
+        padding-top: 60px;
         width: 270px;
-        bottom:100px;
         left: 20px;
         font-family: "prime", Verdana, Tahoma;
         font-size:250%;
-        padding:30px;
+        padding-left: 50px;
+        text-shadow: black 0.1em 0.1em 0.2em
+
 
       }
+
 
       #time {
+        margin-top:20%;
         float:right;
-        position:relative;
-        top:30%;
-        width: 270px;
-        bottom:100px;
-        left: 20px;
+        width:250px;
+        margin-right:25px;
         font-family: "prime", Verdana, Tahoma;
         font-size:250%;
-        padding:30px;
-
+        text-shadow: black 0.1em 0.1em 0.2em
       }
+
 
       .year {
         font: 16px Georgia;
@@ -114,7 +110,7 @@
         position: absolute;
         bottom: 15px;
         left: 20px;
-        background: url(ce.png);
+        background: transparent;
       }
 
 
@@ -131,12 +127,12 @@
 
 
   <div id="container"></div>
-
+<!--
   <div id="info">
     <strong><a href="http://www.chromeexperiments.com/globe">WebGL Globe</a></strong> <span class="bull">&bull;</span> Created by the Google Data Arts Team <span class="bull">&bull;</span> Data acquired from <a href="http://sedac.ciesin.columbia.edu/gpw/">SEDAC</a>
   </div>
-
-  <div id="currentInfo">
+-->
+  <div>
 
     <span id="year1990" class="year"></span>
     <span id="year1995" class="year"></span>
@@ -144,6 +140,13 @@
   </div>
 
   <div id="title">
+    <strong>PIONEER</strong>
+  </div>
+
+
+
+  <div id="time">
+
     <span id="spanDate">
       <script>
     var months = ['January','February','March','April','May','June','July',
@@ -152,13 +155,10 @@
     tomorrow.getDate(tomorrow.getTime() + (1000*3600*24));
     document.getElementById("spanDate").innerHTML = months[tomorrow.getMonth()] + " " + (tomorrow.getDate())+ ", " + tomorrow.getFullYear();
     </script>
-    <br>
-
     </span>
-  </div>
-
-  <div id="time">
-    <script>
+<br><br><br>
+<span id="timespan">
+<script>
   function startTime() {
       var today = new Date();
       var h = today.getHours();
@@ -167,7 +167,7 @@
       // add a zero in front of numbers<10
       m = checkTime(m);
       s = checkTime(s);
-      document.getElementById('time').innerHTML = h + ":" + m + ":" + s;
+      document.getElementById('timespan').innerHTML = h + ":" + m + ":" + s;
       t = setTimeout(function () {
           startTime()
       }, 500);
@@ -182,7 +182,7 @@
 
 
     </script>
-
+</span>
 
 </div>
 
@@ -249,7 +249,7 @@
             globe.createPoints();
             settime(globe,0)();
             globe.animate();
-            document.body.style.backgroundImage = 'none'; // remove loading
+            document.body.style.backgroundimage = 'none'; // remove loading
           }
         }
       };
