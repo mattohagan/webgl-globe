@@ -7,6 +7,10 @@
       html {
         height: 100%;
       }
+      @font-face {
+          font-family: "prime";
+          src: url(prime.otf) format("truetype");
+      }
       body {
         margin: 0;
         padding: 0;
@@ -38,7 +42,7 @@
 
         background-color: rgba(0,0,0,0.2);
 
-        border-top: 1px solid rgba(255,255,255,0.4);
+
         padding: 10px;
       }
 
@@ -56,14 +60,27 @@
       }
 
       #title {
-        position: absolute;
         top: 20px;
         width: 270px;
+        bottom:100px;
         left: 20px;
-        background-color: rgba(0,0,0,0.2);
-        border-radius: 3px;
-        font: 20px Georgia;
-        padding: 10px;
+        font-family: "prime", Verdana, Tahoma;
+        font-size:250%;
+        padding:30px;
+
+      }
+
+      #time {
+        float:right;
+        position:relative;
+        top:30%;
+        width: 270px;
+        bottom:100px;
+        left: 20px;
+        font-family: "prime", Verdana, Tahoma;
+        font-size:250%;
+        padding:30px;
+
       }
 
       .year {
@@ -73,16 +90,18 @@
         text-align: center;
         float: left;
         width: 90px;
-        color: rgba(255, 255, 255, 0.4);
+        /*color: rgba(255, 255, 255, 0.4);
 
         cursor: pointer;
         -webkit-transition: all 0.1s ease-out;
+        */
       }
-
+/*
       .year:hover, .year.active {
         font-size: 23px;
         color: #fff;
       }
+      */
 
       #ce span {
         display: none;
@@ -97,6 +116,9 @@
         left: 20px;
         background: url(ce.png);
       }
+
+
+
 
 
     </style>
@@ -116,9 +138,9 @@
 
   <div id="currentInfo">
 
-    <span id="year1990" class="year">1990</span>
-    <span id="year1995" class="year">1995</span>
-    <span id="year2000" class="year">2000</span>
+    <span id="year1990" class="year"></span>
+    <span id="year1995" class="year"></span>
+    <span id="year2000" class="year"></span>
   </div>
 
   <div id="title">
@@ -130,8 +152,39 @@
     tomorrow.getDate(tomorrow.getTime() + (1000*3600*24));
     document.getElementById("spanDate").innerHTML = months[tomorrow.getMonth()] + " " + (tomorrow.getDate())+ ", " + tomorrow.getFullYear();
     </script>
+    <br>
+
     </span>
   </div>
+
+  <div id="time">
+    <script>
+  function startTime() {
+      var today = new Date();
+      var h = today.getHours();
+      var m = today.getMinutes();
+      var s = today.getSeconds();
+      // add a zero in front of numbers<10
+      m = checkTime(m);
+      s = checkTime(s);
+      document.getElementById('time').innerHTML = h + ":" + m + ":" + s;
+      t = setTimeout(function () {
+          startTime()
+      }, 500);
+  }
+  startTime();
+    function checkTime(i) {
+  if (i < 10) {
+      i = "0" + i;
+  }
+  return i;
+}
+
+
+    </script>
+
+
+</div>
 
   <a id="ce" href="http://www.chromeexperiments.com/globe">
     <span>This is a Chrome Experiment</span>
