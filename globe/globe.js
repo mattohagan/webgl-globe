@@ -24,10 +24,12 @@ DAT.Globe = function(container, opts) {
   };
   var imgDir = opts.imgDir || '';
 
+
   var Shaders = {
     'earth' : {
       uniforms: {
-        'texture': { type: 't', value: null }
+        'texture': { type: 't', value: null },
+        'transparent': true
       },
       vertexShader: [
         'varying vec3 vNormal;',
@@ -70,6 +72,7 @@ DAT.Globe = function(container, opts) {
   };
   var newsPoints = [];
   var ptNum = 0;
+  var INTERSECTED;
 
   var spin = true;
 
@@ -133,7 +136,7 @@ DAT.Globe = function(container, opts) {
           vertexShader: shader.vertexShader,
           fragmentShader: shader.fragmentShader,
           side: THREE.BackSide,
-          blending: THREE.AdditiveBlending,
+          //blending: THREE.AdditiveBlending,
           transparent: true
         });
 
@@ -142,13 +145,15 @@ DAT.Globe = function(container, opts) {
     scene.add(mesh);
 
     geometry = new THREE.SphereGeometry(2,0.75, 0.75);
-    geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0,0,-15));
+    geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0,0,-20));
 
     var ptMaterial = new THREE.MeshBasicMaterial({color: 0xFF9900});
-    point = new THREE.Mesh(geometry, ptMaterial);
+    point = new THREE.Mesh(geometry, material);
 
-    renderer = new THREE.WebGLRenderer({antialias: true});
+    renderer = new THREE.WebGLRenderer({antialias: false});
     renderer.setSize(w, h);
+
+    projector = new THREE.Projector();
 
     renderer.domElement.style.position = 'absolute';
 
@@ -163,7 +168,7 @@ DAT.Globe = function(container, opts) {
     window.addEventListener('resize', onWindowResize, false);
 
     container.addEventListener('mouseover', function() {
-      overRenderer = false;
+      overRenderer = true;
       // was true
     }, false);
 
@@ -175,11 +180,11 @@ DAT.Globe = function(container, opts) {
   addData = function(data, opts) {
     var lat, lng, size, color, i, step, colorFnWrapper;
 
-    opts.animated = opts.animated || false;
-    this.is_animated = opts.animated;
-    opts.format = opts.format || 'magnitude'; // other option is 'legend'
-    console.log(opts.format);
-    if (opts.format === 'magnitude') {
+    //opts.animated = opts.animated || false;
+    //this.is_animated = opts.animated;
+    //opts.format = opts.format || 'magnitude'; // other option is 'legend'
+    //console.log(opts.format);
+    /*if (opts.format === 'magnitude') {
       step = 3;
       colorFnWrapper = function(data, i) { return colorFn(data[i+2]); }
     } else if (opts.format === 'legend') {
@@ -187,12 +192,13 @@ DAT.Globe = function(container, opts) {
       colorFnWrapper = function(data, i) { return colorFn(data[i+3]); }
     } else {
       throw('error: format not supported: '+opts.format);
-    }
+    }*/
 
+    /*
     if (opts.animated) {
       if (this._baseGeometry === undefined) {
         this._baseGeometry = new THREE.Geometry();
-        for (i = 0; i < data.length; i += step) {
+        for (i = 0; i < data.length; i++) {
           lat = data[i];
           lng = data[i + 1];
 //        size = data[i + 2];
@@ -211,13 +217,16 @@ DAT.Globe = function(container, opts) {
         this._morphTargetId += 1;
       }
       opts.name = opts.name || 'morphTarget'+this._morphTargetId;
-    }
+    }*/
     var subgeo = new THREE.Geometry();
-    for (i = 0; i < data.length; i ++) {
-      lat = data[i];
-      lng = data[i + 1];
-      color = colorFnWrapper(data,i);
-      size = data[i + 2];
+    var c = new THREE.Color();
+    console.log(data.length);
+
+    for (i = 0; i < data.length; i++) {
+      lat = data[i][0];
+      lng = data[i][1];
+      color = c.setHex(0xFF9900);
+      size = 0.005;
       size = size*200;
       addPoint(lat, lng, size, color, subgeo);
     }
@@ -228,6 +237,32 @@ DAT.Globe = function(container, opts) {
     }*/
 
   };
+/*
+  function update() {
+    var vector = new THREE.Vector3( mouseX, mouseY, 1);
+    projector.unprojectVector(vector, camera);
+
+    var ray = new THREE.Ray(camera.position, vector.subSelf(camera.position).normalize());
+    var intersects = ray.intersectObjects(scene.children);
+
+    if(intersects.length > 0){
+      if(intersects[0].object != INTERSECTED){
+        if(INTERSECTED){
+          INTERSECTED.material.color.setHex(0xF0000D);
+
+          INTERSECTED = intersects[0].object;
+
+          INTERSECTED.material.color.setHex(0xFF9900);
+        }
+      }
+      else{
+        if(INTERSECTED){
+          INTERSECTED.material.color.setHex(0xFFFFFF);
+          INTERSECTED = null;
+        }
+      }
+    }
+  }*/
 
   function createPoints() {
     /*if (this._baseGeometry !== undefined) {
@@ -263,7 +298,7 @@ DAT.Globe = function(container, opts) {
   }
 
   function addPoint(lat, lng, size, color, subgeo) {
-
+    console.log('------------------------------');
     var phi = (90 - lat) * Math.PI / 180;
     var theta = (180 - lng) * Math.PI / 180;
 
@@ -294,10 +329,10 @@ DAT.Globe = function(container, opts) {
     dot.scale.z = Math.max( size, 0.1 ); // avoid non-invertible matrix
     dot.updateMatrix();
 
-    //if ((ptNum % 2) === 0){
-      newsPoints.push(dot);
-      scene.add(dot);
-      console.log('added dot ' + ptNum);
+    
+    newsPoints.push(dot);
+    scene.add(dot);
+    console.log('added dot ' + ptNum);
     //}
     //console.log(point);
     ptNum++;
@@ -319,6 +354,37 @@ DAT.Globe = function(container, opts) {
     targetOnDown.y = target.y;
 
     container.style.cursor = 'move';
+
+    var vector = new THREE.Vector3((event.clientX / window.innderWidth) * 2 - 1, - (event.clientY / window.innerHeight) * 2 +1, 0.5);
+    projector.unprojectVector(vector, camera);
+
+    var raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
+
+    var intersects = raycaster.intersectObjects(newsPoints);
+
+    var particleMaterial = new THREE.SpriteCanvasMaterial({
+        
+        color:0x00000,
+        program: function (context){
+          
+          context.beginPath();
+          context.arc(0,0,0.5,0,(Math.PI * 2), true);
+          context.fill();
+        }
+    });
+
+    if(intersects.length > 0){
+      intersects[ 0 ].object.material.color.setHex(0xF0000D);
+      
+      var particle = new THREE.Sprite(particleMaterial);
+      particle.position = intersects[0].point;
+      particle.scale.x = particle.scale.y = 16;
+      scene.add(particle);
+    }
+
+
+
+
   }
 
   function onMouseMove(event) {
@@ -425,8 +491,8 @@ DAT.Globe = function(container, opts) {
     for(var i=0;i<newsPoints.length;i++)
     {
       newsPoints[0].material.color.setHex(0xF0000D);
-      console.log(newsPoints[0]);
-      console.log(newsPoints[1]);
+      //console.log(newsPoints[0]);
+     // console.log(newsPoints[1]);
     }
 
 
