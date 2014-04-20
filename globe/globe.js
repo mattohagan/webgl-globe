@@ -67,6 +67,8 @@ DAT.Globe = function(container, opts) {
       ].join('\n')
     }
   };
+  var newsPoints = [];
+  var ptNum = 0;
 
   var spin = true;
 
@@ -115,7 +117,8 @@ DAT.Globe = function(container, opts) {
           fragmentShader: shader.fragmentShader
 
         });
-
+    
+    console.log("creating mesh");
     mesh = new THREE.Mesh(geometry, material);
     mesh.rotation.y = Math.PI;
     scene.add(mesh);
@@ -139,9 +142,10 @@ DAT.Globe = function(container, opts) {
     scene.add(mesh);
 
     geometry = new THREE.SphereGeometry(2,0.75, 0.75);
-    geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0,0,0.5));
+    geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0,0,-15));
 
-    point = new THREE.Mesh(geometry);
+    var ptMaterial = new THREE.MeshBasicMaterial({color: 0xFF9900});
+    point = new THREE.Mesh(geometry, ptMaterial);
 
     renderer = new THREE.WebGLRenderer({antialias: true});
     renderer.setSize(w, h);
@@ -193,6 +197,10 @@ DAT.Globe = function(container, opts) {
 //        size = data[i + 2];
           color = colorFnWrapper(data,i);
           size = 0;
+          //if(i === 0)
+            color.setHex(0xFF9900);
+
+          // THIS IS THE DAMN VISIBLE GEOMETRY
           addPoint(lat, lng, size, color, this._baseGeometry);
         }
       }
@@ -238,16 +246,18 @@ DAT.Globe = function(container, opts) {
             this._baseGeometry.morphTargets.push({'name': 'morphPadding'+i, vertices: this._baseGeometry.vertices});
           }
         }
-        shader = Shaders['earth'];
-        console.log(shader);
+        //shader = Shaders['earth'];
+        //console.log(shader);
         this.points = new THREE.Mesh(this._baseGeometry, new THREE.MeshBasicMaterial({
               color: 0xffffff,
               vertexColors: THREE.FaceColors,
-              morphTargets: true,
-              vertexShader: shader.vertexShader
+              morphTargets: true
             }));
       }
+      // only runs once, this.points is a mesh
       scene.add(this.points);
+      console.log('added this.points');
+      console.log(this.points);
     }
   }
 
@@ -256,14 +266,15 @@ DAT.Globe = function(container, opts) {
     var phi = (90 - lat) * Math.PI / 180;
     var theta = (180 - lng) * Math.PI / 180;
 
-    point.position.x = 200 * Math.sin(phi) * Math.cos(theta);
-    point.position.y = 200 * Math.cos(phi);
-    point.position.z = 200 * Math.sin(phi) * Math.sin(theta);
+    //point.position.x = 200 * Math.sin(phi) * Math.cos(theta);
+    //point.position.y = 200 * Math.cos(phi);
+    //point.position.z = 200 * Math.sin(phi) * Math.sin(theta);
 
-    point.lookAt(mesh.position);
+    //point.lookAt(mesh.position);
+    //console.log(mesh.position);
 
-    point.scale.z = Math.max( size, 0.1 ); // avoid non-invertible matrix
-    point.updateMatrix();
+    //point.scale.z = Math.max( size, 0.1 ); // avoid non-invertible matrix
+    //point.updateMatrix();
 
     for (var i = 0; i < point.geometry.faces.length; i++) {
 
@@ -271,7 +282,24 @@ DAT.Globe = function(container, opts) {
 
     }
 
-    THREE.GeometryUtils.merge(subgeo, point);
+    var ptMaterial = new THREE.MeshBasicMaterial({color: 0xFF9900});
+
+    var dot = new THREE.Mesh(point.geometry, ptMaterial);
+    //dot.position = point.position;
+    dot.position.x = 200 * Math.sin(phi) * Math.cos(theta);
+    dot.position.y = 200 * Math.cos(phi);
+    dot.position.z = 200 * Math.sin(phi) * Math.sin(theta);
+    dot.lookAt(mesh.position);
+    dot.scale.z = Math.max( size, 0.1 ); // avoid non-invertible matrix
+    dot.updateMatrix();
+
+    if ((ptNum % 2) === 0){
+      newsPoints.push(dot);
+      scene.add(dot);
+    }
+    //console.log(point);
+    ptNum++;
+    //THREE.GeometryUtils.merge(subgeo, point);
   }
 
   function onMouseDown(event) {
@@ -382,6 +410,7 @@ DAT.Globe = function(container, opts) {
           target.y = target.y + .02;
 
         target.x = target.x + .04;
+        //console.log(newsPoints[3].position);
       }
     else
       abortTimer();
@@ -390,6 +419,17 @@ DAT.Globe = function(container, opts) {
   function abortTimer(){
     clearInterval(tid);
     stid = setTimeout(listenToSpin, 3000);
+    //newsPoints[1].material.color.setRGB(0, 0, 0);
+    console.log(newsPoints.length);
+    for(var i=0;i<newsPoints.length;i++)
+    {
+      newsPoints[0].pos
+      newsPoints[0].material.color.setHex(0xF0000D);
+
+      console.log(newsPoints[i].color + ' ' + newsPoints[i].visible);
+    }
+
+    
   }
 
   function resetTimeout(){
@@ -404,12 +444,14 @@ DAT.Globe = function(container, opts) {
     clearTimeout(stid);
   }
 
+
   init();
   this.animate = animate;
 
   var stid;
   var tid = setInterval(spinGlobe, 100);
 
+ 
 
   this.__defineGetter__('time', function() {
     return this._time || 0;
@@ -444,6 +486,8 @@ DAT.Globe = function(container, opts) {
   this.renderer = renderer;
   this.scene = scene;
 
+  //for(var i = 0; i< newsPoints.length; i++)
+   // console.log(newsPoints[i]);
   return this;
 
 };
