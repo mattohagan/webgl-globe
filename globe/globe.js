@@ -329,7 +329,7 @@ DAT.Globe = function(container, opts) {
     dot.scale.z = Math.max( size, 0.1 ); // avoid non-invertible matrix
     dot.updateMatrix();
 
-    
+
     newsPoints.push(dot);
     scene.add(dot);
     console.log('added dot ' + ptNum);
@@ -361,10 +361,10 @@ DAT.Globe = function(container, opts) {
     var intersects = raycaster.intersectObjects(newsPoints);
 
     var particleMaterial = new THREE.SpriteCanvasMaterial({
-        
+
         color:0x00000,
         program: function (context){
-          
+
           context.beginPath();
           context.arc(0,0,0.5,0,PI_HALF, true);
           context.fill();
@@ -373,7 +373,7 @@ DAT.Globe = function(container, opts) {
 
     if(intersects.length > 0){
       intersects[ 0 ].object.material.color.setHex(0xF0000D);
-      
+
       var particle = new THREE.Sprite(particleMaterial);
       particle.position = intersects[0].point;
       particle.scale.x = particle.scale.y = 16;
