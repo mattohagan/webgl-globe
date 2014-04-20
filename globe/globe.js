@@ -18,7 +18,8 @@ DAT.Globe = function(container, opts) {
 
   var colorFn = opts.colorFn || function(x) {
     var c = new THREE.Color();
-    c.setHSL( ( 0.6 - ( x * 0.5 ) ), 1.0, 0.5 );
+    //c.setHSL( ( 0.6 - ( x * 0.5 ) ), 1.0, 0.5 );
+    c.setHex(0xFF9900);
     return c;
   };
   var imgDir = opts.imgDir || '';
@@ -134,7 +135,6 @@ DAT.Globe = function(container, opts) {
           side: THREE.BackSide,
           blending: THREE.AdditiveBlending,
           transparent: true
-
         });
 
     mesh = new THREE.Mesh(geometry, material);
@@ -163,7 +163,8 @@ DAT.Globe = function(container, opts) {
     window.addEventListener('resize', onWindowResize, false);
 
     container.addEventListener('mouseover', function() {
-      overRenderer = true;
+      overRenderer = false;
+      // was true
     }, false);
 
     container.addEventListener('mouseout', function() {
@@ -201,7 +202,7 @@ DAT.Globe = function(container, opts) {
             color.setHex(0xFF9900);
 
           // THIS IS THE DAMN VISIBLE GEOMETRY
-          addPoint(lat, lng, size, color, this._baseGeometry);
+          //addPoint(lat, lng, size, color, this._baseGeometry);
         }
       }
       if(this._morphTargetId === undefined) {
@@ -212,7 +213,7 @@ DAT.Globe = function(container, opts) {
       opts.name = opts.name || 'morphTarget'+this._morphTargetId;
     }
     var subgeo = new THREE.Geometry();
-    for (i = 0; i < data.length; i += step) {
+    for (i = 0; i < data.length; i ++) {
       lat = data[i];
       lng = data[i + 1];
       color = colorFnWrapper(data,i);
@@ -220,16 +221,16 @@ DAT.Globe = function(container, opts) {
       size = size*200;
       addPoint(lat, lng, size, color, subgeo);
     }
-    if (opts.animated) {
+    /*if (opts.animated) {
       this._baseGeometry.morphTargets.push({'name': opts.name, vertices: subgeo.vertices});
     } else {
       this._baseGeometry = subgeo;
-    }
+    }*/
 
   };
 
   function createPoints() {
-    if (this._baseGeometry !== undefined) {
+    /*if (this._baseGeometry !== undefined) {
       if (this.is_animated === false) {
         this.points = new THREE.Mesh(this._baseGeometry, new THREE.MeshBasicMaterial({
               color: 0xffffff,
@@ -251,14 +252,14 @@ DAT.Globe = function(container, opts) {
         this.points = new THREE.Mesh(this._baseGeometry, new THREE.MeshBasicMaterial({
               color: 0xffffff,
               vertexColors: THREE.FaceColors,
-              morphTargets: true
+              morphTargets: false
             }));
       }
       // only runs once, this.points is a mesh
-      scene.add(this.points);
-      console.log('added this.points');
-      console.log(this.points);
-    }
+      //scene.add(this.points);
+      //console.log('added this.points');
+      //console.log(this.points);
+    }*/
   }
 
   function addPoint(lat, lng, size, color, subgeo) {
@@ -293,10 +294,11 @@ DAT.Globe = function(container, opts) {
     dot.scale.z = Math.max( size, 0.1 ); // avoid non-invertible matrix
     dot.updateMatrix();
 
-    if ((ptNum % 2) === 0){
+    //if ((ptNum % 2) === 0){
       newsPoints.push(dot);
       scene.add(dot);
-    }
+      console.log('added dot ' + ptNum);
+    //}
     //console.log(point);
     ptNum++;
     //THREE.GeometryUtils.merge(subgeo, point);
@@ -410,7 +412,7 @@ DAT.Globe = function(container, opts) {
           target.y = target.y + .02;
 
         target.x = target.x + .04;
-        //console.log(newsPoints[3].position);
+
       }
     else
       abortTimer();
@@ -420,13 +422,11 @@ DAT.Globe = function(container, opts) {
     clearInterval(tid);
     stid = setTimeout(listenToSpin, 3000);
     //newsPoints[1].material.color.setRGB(0, 0, 0);
-    console.log(newsPoints.length);
     for(var i=0;i<newsPoints.length;i++)
     {
-      newsPoints[0].pos
       newsPoints[0].material.color.setHex(0xF0000D);
-
-      console.log(newsPoints[i].color + ' ' + newsPoints[i].visible);
+      console.log(newsPoints[0]);
+      console.log(newsPoints[1]);
     }
 
     
@@ -458,7 +458,7 @@ DAT.Globe = function(container, opts) {
   });
 
   this.__defineSetter__('time', function(t) {
-    var validMorphs = [];
+   /* var validMorphs = [];
     var morphDict = this.points.morphTargetDictionary;
     for(var k in morphDict) {
       if(k.indexOf('morphPadding') < 0) {
@@ -478,7 +478,7 @@ DAT.Globe = function(container, opts) {
       this.points.morphTargetInfluences[lastIndex] = 1 - leftover;
     }
     this.points.morphTargetInfluences[index] = leftover;
-    this._time = t;
+    this._time = t;*/
   });
 
   this.addData = addData;
