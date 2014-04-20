@@ -222,7 +222,7 @@ DAT.Globe = function(container, opts) {
     var c = new THREE.Color();
     console.log(data.length);
 
-    for (var i = 0; i < data.length; i++) {
+    for (i = 0; i < data.length; i++) {
       lat = data[i][0];
       lng = data[i][1];
       color = c.setHex(0xFF9900);
@@ -329,10 +329,12 @@ DAT.Globe = function(container, opts) {
     dot.scale.z = Math.max( size, 0.1 ); // avoid non-invertible matrix
     dot.updateMatrix();
 
-    
+
     newsPoints.push(dot);
     scene.add(dot);
     console.log('added dot ' + ptNum);
+    //}
+    //console.log(point);
     ptNum++;
     //THREE.GeometryUtils.merge(subgeo, point);
   }
@@ -361,19 +363,19 @@ DAT.Globe = function(container, opts) {
     var intersects = raycaster.intersectObjects(newsPoints);
 
     var particleMaterial = new THREE.SpriteCanvasMaterial({
-        
+
         color:0x00000,
         program: function (context){
-          
+
           context.beginPath();
-          context.arc(0,0,0.5,0,PI_HALF, true);
+          context.arc(0,0,0.5,0,(Math.PI * 2), true);
           context.fill();
         }
     });
 
     if(intersects.length > 0){
       intersects[ 0 ].object.material.color.setHex(0xF0000D);
-      
+
       var particle = new THREE.Sprite(particleMaterial);
       particle.position = intersects[0].point;
       particle.scale.x = particle.scale.y = 16;
