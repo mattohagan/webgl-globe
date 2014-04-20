@@ -117,7 +117,7 @@ DAT.Globe = function(container, opts) {
           fragmentShader: shader.fragmentShader
 
         });
-    
+
     console.log("creating mesh");
     mesh = new THREE.Mesh(geometry, material);
     mesh.rotation.y = Math.PI;
@@ -429,7 +429,7 @@ DAT.Globe = function(container, opts) {
       console.log(newsPoints[i].color + ' ' + newsPoints[i].visible);
     }
 
-    
+
   }
 
   function resetTimeout(){
@@ -451,7 +451,7 @@ DAT.Globe = function(container, opts) {
   var stid;
   var tid = setInterval(spinGlobe, 100);
 
- 
+
 
   this.__defineGetter__('time', function() {
     return this._time || 0;
