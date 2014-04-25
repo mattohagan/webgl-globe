@@ -475,7 +475,7 @@ DAT.Globe = function(container, opts) {
         else if(target.y < 0.4)
           target.y = target.y + .02;
 
-        target.x = target.x + .04;
+        target.x = target.x + .02;
 
       }
     else
